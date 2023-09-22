@@ -77,6 +77,8 @@ rayTracer.lights.append(
 )
 
 isRunning = True
+rayTracer.rtClear()
+rayTracer.rtRender()
 
 while isRunning:
     for event in pygame.event.get():
@@ -86,8 +88,6 @@ while isRunning:
             if event.key == pygame.K_ESCAPE:
                 isRunning = False
 
-    rayTracer.rtClear()
-    rayTracer.rtRender()
     pygame.display.flip()
 
 pygame.quit()
