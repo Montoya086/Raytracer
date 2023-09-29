@@ -1,4 +1,5 @@
 import MontiMaths as mm
+from math import tan, pi, atan2, acos
 
 class Shape:
     def __init__(self, position, material):
@@ -13,10 +14,11 @@ class Shape:
     
 
 class Intercept:
-    def __init__(self, distance, point, normal, obj):
+    def __init__(self, distance, point, normal, obj, texcoords):
         self.distance = distance
         self.point = point
         self.normal = normal
+        self.texcoords = texcoords
         self.obj = obj
 
 
@@ -48,7 +50,11 @@ class Sphere(Shape):
         normal = mm.subVec(point, self.position)
         normal = mm.normVec(normal)
 
+        u = (atan2(normal[2], normal[0]) / (2 * pi)) + 0.5
+        v = acos(normal[1]) / pi
+
         return Intercept(distance=t0,
                          point=point,
                          normal=normal,
+                         texcoords=(u, v),
                          obj=self)

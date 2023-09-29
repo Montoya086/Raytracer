@@ -8,8 +8,8 @@ from Light import Point as PointLight
 from RayTracer import RayTracer
 import Materials.Material as Material
 
-width = 300
-height = 300
+width = 720
+height = 720
 
 pygame.init()
 
@@ -17,53 +17,33 @@ screen = pygame.display.set_mode((width, height), pygame.DOUBLEBUF | pygame.HWAC
 screen.set_alpha(None)
 
 rayTracer = RayTracer(screen)
-rayTracer.rtClearColor(0, 0, 0)
+rayTracer.envMap = pygame.image.load("Textures/desert.bmp")
+rayTracer.rtClearColor(0.5, 0.5, 0.5)
 rayTracer.rtColor(1, 1, 1)
 
-#snow
+
 rayTracer.scene.append(
-    Sphere(position=(0, -1.5, -5), radius=1, material=Material.snow())
+    Sphere(position=(-1, -0.5, -3), radius=0.4, material=Material.glass())
 )
 rayTracer.scene.append(
-    Sphere(position=(0, -0.3, -5), radius=0.9, material=Material.snow())
+    Sphere(position=(-1, -0.2, -5), radius=0.6, material=Material.saturn())
 )
 rayTracer.scene.append(
-    Sphere(position=(0, 0.7, -5), radius=0.7, material=Material.snow())
-)
-#buttons
-rayTracer.scene.append(
-    Sphere(position=(0, 0, -2), radius=0.05, material=Material.stone())
+    Sphere(position=(-1, 1, -3), radius=0.4, material=Material.diamond())
 )
 rayTracer.scene.append(
-    Sphere(position=(0, -0.7, -2), radius=0.08, material=Material.stone())
+    Sphere(position=(0, -0.5, -3), radius=0.4, material=Material.moon())
 )
 rayTracer.scene.append(
-    Sphere(position=(0, -0.35, -2), radius=0.065, material=Material.stone())
-)
-#mouth
-rayTracer.scene.append(
-    Sphere(position=(0.03, 0.25, -2), radius=0.02, material=Material.stone())
+    Sphere(position=(0, 1, -3), radius=0.4, material=Material.mirror())
 )
 rayTracer.scene.append(
-    Sphere(position=(-0.03, 0.25, -2), radius=0.02, material=Material.stone())
+    Sphere(position=(1, -0.5, -3), radius=0.4, material=Material.earth())
 )
 rayTracer.scene.append(
-    Sphere(position=(0.08, 0.275, -2), radius=0.02, material=Material.stone())
+    Sphere(position=(1, 1, -3), radius=0.4, material=Material.mars())
 )
-rayTracer.scene.append(
-    Sphere(position=(-0.08, 0.275, -2), radius=0.02, material=Material.stone())
-)
-#carrot
-rayTracer.scene.append(
-    Sphere(position=(0, 0.35, -2), radius=0.05, material=Material.carrot())
-)
-#eyes
-rayTracer.scene.append(
-    Sphere(position=(0.1, 0.4, -2), radius=0.04, material=Material.brigthStone())
-)
-rayTracer.scene.append(
-    Sphere(position=(-0.1, 0.4, -2), radius=0.04, material=Material.brigthStone())
-)
+
 
 #lights
 rayTracer.lights.append(
@@ -80,6 +60,8 @@ isRunning = True
 rayTracer.rtClear()
 rayTracer.rtRender()
 
+print("Done!")
+
 while isRunning:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -88,6 +70,8 @@ while isRunning:
             if event.key == pygame.K_ESCAPE:
                 isRunning = False
 
-    pygame.display.flip()
+rect = pygame.Rect(0, 0, width, height)
+sub = screen.subsurface(rect)
+pygame.image.save(sub, "output.png")
 
 pygame.quit()
