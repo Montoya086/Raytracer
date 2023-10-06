@@ -66,3 +66,19 @@ def brigthStone():
 
 def carrot():
     return Material(diffuse=(1, 0.5, 0), spec=32, ks=0.5)
+
+
+def opaqueGold():
+    return Material(diffuse=(1, 0.8, 0.2), spec=32, ks=0.5)
+
+
+def opaqueCopper():
+    return Material(diffuse=(0.9, 0.5, 0.3), spec=32, ks=0.5)
+
+
+def ceiling():
+    return Material(diffuse=(0.8, 0.8, 0.8), spec=32, ks=0.5)
+
+
+def floor():
+    return Material(diffuse=(0.5, 0.5, 0.5), spec=32, ks=0.5, matType=REFLECTIVE)

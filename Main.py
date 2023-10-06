@@ -1,7 +1,7 @@
 import pygame
 from pygame.locals import *
 
-from Shape import Sphere
+from Shape import Sphere, Plane, Disk, AABB
 from Light import Ambient as AmbientLight
 from Light import Directional as DirectionalLight
 from Light import Point as PointLight
@@ -23,37 +23,46 @@ rayTracer.rtColor(1, 1, 1)
 
 
 rayTracer.scene.append(
-    Sphere(position=(-1, -0.5, -3), radius=0.4, material=Material.glass())
+    AABB(position=(-1.5, -0.75, -5), size=(1.5, 1.5, 1.5), material=Material.mars())
 )
 rayTracer.scene.append(
-    Sphere(position=(-1, -0.2, -5), radius=0.6, material=Material.saturn())
+    AABB(position=(1.5, -0.75, -5), size=(1.5, 1.5, 1.5), material=Material.saturn())
 )
 rayTracer.scene.append(
-    Sphere(position=(-1, 1, -3), radius=0.4, material=Material.diamond())
+    AABB(position=(0, 2, -8), size=(1.5, 1.5, 1.5), material=Material.earth())
 )
 rayTracer.scene.append(
-    Sphere(position=(0, -0.5, -3), radius=0.4, material=Material.moon())
+    Disk(position=(0, 0.50, -11.9), normal=(0, 0, 1), radius=1.5, material=Material.mirror())
 )
 rayTracer.scene.append(
-    Sphere(position=(0, 1, -3), radius=0.4, material=Material.mirror())
+    Plane(position=(0, -1.5, 0), normal=(0, 1, 0), material=Material.floor())
 )
 rayTracer.scene.append(
-    Sphere(position=(1, -0.5, -3), radius=0.4, material=Material.earth())
+    Plane(position=(0, 3, 0), normal=(0, -1, 0), material=Material.ceiling())
 )
 rayTracer.scene.append(
-    Sphere(position=(1, 1, -3), radius=0.4, material=Material.mars())
+    Plane(position=(0, 0, -12), normal=(0, 0, -1), material=Material.opaqueCopper())
+)
+rayTracer.scene.append(
+    Plane(position=(0, 0, 6), normal=(0, 0, 1), material=Material.ceiling())
+)
+rayTracer.scene.append(
+    Plane(position=(-3, 0, 0), normal=(1, 0, 0), material=Material.opaqueGold())
+)
+rayTracer.scene.append(
+    Plane(position=(3, 0, 0), normal=(-1, 0, 0), material=Material.opaqueGold())
 )
 
 
 #lights
 rayTracer.lights.append(
-    AmbientLight(intensity=0.5)
+    AmbientLight(intensity=0.4)
 )
+""" rayTracer.lights.append(
+    DirectionalLight(direction=(-1, -1, -1), intensity=0.9)
+) """
 rayTracer.lights.append(
-    DirectionalLight(direction=(-1, -1, -1), intensity=0.3)
-)
-rayTracer.lights.append(
-    PointLight(position=(2.5, 0, -5), intensity=1)
+    PointLight(position=(0, 0, -5), intensity=2)
 )
 
 isRunning = True
@@ -62,13 +71,13 @@ rayTracer.rtRender()
 
 print("Done!")
 
-while isRunning:
+""" while isRunning:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             isRunning = False
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
-                isRunning = False
+                isRunning = False """
 
 rect = pygame.Rect(0, 0, width, height)
 sub = screen.subsurface(rect)
