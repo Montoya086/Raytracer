@@ -1,7 +1,7 @@
 import pygame
 from pygame.locals import *
 
-from Shape import Sphere, Plane, Disk, AABB
+from Shape import Sphere, Plane, Disk, AABB, Triangle, Pyramid
 from Light import Ambient as AmbientLight
 from Light import Directional as DirectionalLight
 from Light import Point as PointLight
@@ -17,22 +17,19 @@ screen = pygame.display.set_mode((width, height), pygame.DOUBLEBUF | pygame.HWAC
 screen.set_alpha(None)
 
 rayTracer = RayTracer(screen)
-rayTracer.envMap = pygame.image.load("Textures/desert.bmp")
+#rayTracer.envMap = pygame.image.load("Textures/desert.bmp")
 rayTracer.rtClearColor(0.5, 0.5, 0.5)
 rayTracer.rtColor(1, 1, 1)
 
 
+""" rayTracer.scene.append(
+    Sphere(position=(0, 0, -3), radius=1, material=Material.brick())
+) """
+""" rayTracer.scene.append(
+    Triangle(vertices=[(0, 1, -5), (-1, -1, -5), (1, -1, -5)], material=Material.saturn())
+) """
 rayTracer.scene.append(
-    AABB(position=(-1.5, -0.75, -5), size=(1.5, 1.5, 1.5), material=Material.mars())
-)
-rayTracer.scene.append(
-    AABB(position=(1.5, -0.75, -5), size=(1.5, 1.5, 1.5), material=Material.saturn())
-)
-rayTracer.scene.append(
-    AABB(position=(0, 2, -8), size=(1.5, 1.5, 1.5), material=Material.earth())
-)
-rayTracer.scene.append(
-    Disk(position=(0, 0.50, -11.9), normal=(0, 0, 1), radius=1.5, material=Material.mirror())
+    Pyramid(position=(0, -1.5, -7), width=2, height=2, depth=2, rotation=(0,45,0), material=Material.glass())
 )
 rayTracer.scene.append(
     Plane(position=(0, -1.5, 0), normal=(0, 1, 0), material=Material.floor())
@@ -41,22 +38,25 @@ rayTracer.scene.append(
     Plane(position=(0, 3, 0), normal=(0, -1, 0), material=Material.ceiling())
 )
 rayTracer.scene.append(
-    Plane(position=(0, 0, -12), normal=(0, 0, -1), material=Material.opaqueCopper())
+    Plane(position=(0, 0, -12), normal=(0, 0, -1), material=Material.wall2())
 )
 rayTracer.scene.append(
-    Plane(position=(0, 0, 6), normal=(0, 0, 1), material=Material.ceiling())
+    Plane(position=(0, 0, 6), normal=(0, 0, 1), material=Material.wall2())
 )
 rayTracer.scene.append(
-    Plane(position=(-3, 0, 0), normal=(1, 0, 0), material=Material.opaqueGold())
+    Plane(position=(-3, 0, 0), normal=(1, 0, 0), material=Material.wall1())
 )
 rayTracer.scene.append(
-    Plane(position=(3, 0, 0), normal=(-1, 0, 0), material=Material.opaqueGold())
+    Plane(position=(3, 0, 0), normal=(-1, 0, 0), material=Material.wall1())
 )
+
+
+
 
 
 #lights
 rayTracer.lights.append(
-    AmbientLight(intensity=0.4)
+    AmbientLight(intensity=0.6)
 )
 """ rayTracer.lights.append(
     DirectionalLight(direction=(-1, -1, -1), intensity=0.9)
@@ -81,6 +81,6 @@ print("Done!")
 
 rect = pygame.Rect(0, 0, width, height)
 sub = screen.subsurface(rect)
-pygame.image.save(sub, "output.png")
+pygame.image.save(sub, "output2.png")
 
 pygame.quit()

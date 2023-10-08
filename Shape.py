@@ -1,5 +1,5 @@
 import MontiMaths as mm
-from math import tan, pi, atan2, acos
+from math import tan, pi, atan2, acos, sqrt
 
 class Shape:
     def __init__(self, position, material):
@@ -185,4 +185,116 @@ class AABB(Shape):
                             point=intersect.point,
                             normal=intersect.normal,
                             texcoords=(u,v),
-                            obj=self)
+                            obj=self)    
+
+
+class Triangle(Shape):
+    def __init__(self, vertices, material):
+        super().__init__(position=vertices[0], material=material)
+        self.vertices = vertices
+
+    def intersect(self, origin, direction):
+        v0, v1, v2 = self.vertices
+
+        edge1 = mm.subVec(v1, v0)
+        edge2 = mm.subVec(v2, v0)
+        normal = mm.normVec(mm.crossProd(edge1, edge2))
+
+        d = mm.dotProd(normal, v0)
+
+        denominator = mm.dotProd(normal, direction)
+        if abs(denominator) < 0.0001:
+            return None
+
+        t = (d - mm.dotProd(normal, origin)) / denominator
+        if t < 0:
+            return None
+
+        point = mm.addVec(origin, mm.escMultVector(t, direction))
+
+        edge0 = mm.subVec(v0, v2)
+        edge1 = mm.subVec(v1, v0)
+        edge2 = mm.subVec(v2, v1)
+
+        if mm.dotProd(normal, mm.crossProd(edge0, mm.subVec(point, v2))) < 0:
+            return None
+        
+        if mm.dotProd(normal, mm.crossProd(edge1, mm.subVec(point, v0))) < 0:
+            return None
+        
+        if mm.dotProd(normal, mm.crossProd(edge2, mm.subVec(point, v1))) < 0:
+            return None
+
+        v0, v1, v2 = self.vertices
+
+        edge0 = mm.subVec(v0, v2)
+        edge1 = mm.subVec(v1, v0)
+        edge2 = mm.subVec(v2, v1)
+        c0 = mm.dotProd(edge0, mm.subVec(point, v2))
+        c1 = mm.dotProd(edge1, mm.subVec(point, v0))
+        c2 = mm.dotProd(edge2, mm.subVec(point, v1))
+        total = c0 + c1 + c2
+        u = c1 / total
+        v = c2 / total
+
+        u *= 1.8
+        v *= 1.3
+
+        return Intercept(distance=t,
+                         point=point,
+                         normal=normal,
+                         texcoords=(u, 1-v),
+                         obj=self)
+
+
+class Pyramid(Shape):
+    def __init__(self, position, width, height, depth, rotation, material):
+        super().__init__(position=position, material=material)
+        self.width = width
+        self.height = height
+        self.depth = depth
+        self.rotation = rotation
+
+    def intersect(self, origin, direction):
+        # Define vertices of base
+        v0 = (-self.width / 2, 0, -self.depth / 2)
+        v1 = (-self.width / 2, 0, self.depth / 2)
+        v2 = (self.width / 2, 0, self.depth / 2)
+        v3 = (self.width / 2, 0, -self.depth / 2)
+
+        # Define vertices of apex
+        apex = (0, self.height, 0)
+
+        # Apply rotation transformation to vertices
+        v0 = mm.rotateVec(v0, self.rotation)
+        v1 = mm.rotateVec(v1, self.rotation)
+        v2 = mm.rotateVec(v2, self.rotation)
+        v3 = mm.rotateVec(v3, self.rotation)
+        apex = mm.rotateVec(apex, self.rotation)
+
+        # Translate vertices to position
+        v0 = mm.addVec(v0, self.position)
+        v1 = mm.addVec(v1, self.position)
+        v2 = mm.addVec(v2, self.position)
+        v3 = mm.addVec(v3, self.position)
+        apex = mm.addVec(apex, self.position)
+
+        # Define triangles for base
+        tri1 = Triangle((v0, v1, v2), self.material)
+        tri2 = Triangle((v0, v2, v3), self.material)
+
+        # Define triangles for sides
+        tri3 = Triangle((v0, v1, apex), self.material)
+        tri4 = Triangle((v1, v2, apex), self.material)
+        tri5 = Triangle((v2, v3, apex), self.material)
+        tri6 = Triangle((v3, v0, apex), self.material)
+
+        # Check for intersection with each triangle
+        closest_intercept = None
+        for tri in (tri1, tri2, tri3, tri4, tri5, tri6):
+            intercept = tri.intersect(origin, direction)
+            if intercept is not None:
+                if closest_intercept is None or intercept.distance < closest_intercept.distance:
+                    closest_intercept = intercept
+
+        return closest_intercept

@@ -82,3 +82,14 @@ def ceiling():
 
 def floor():
     return Material(diffuse=(0.5, 0.5, 0.5), spec=32, ks=0.5, matType=REFLECTIVE)
+
+
+def wall1():
+    return Material(diffuse=(0.7, 0.7, 0.7), spec=32, ks=0.5)
+
+def wall2():
+    return Material(diffuse=(0.6, 0.6, 0.6), spec=32, ks=0.5)
+
+def franz():
+    return Material(texture=pygame.image.load("Textures/franz.bmp"))
+

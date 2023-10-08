@@ -141,3 +141,22 @@ def vectorDivEsc(v, s):
     result = [x / s for x in v]
     return result
 
+def rotateVec(vec, rotation):
+    x, y, z = vec
+    rx = math.radians(rotation[0])
+    ry = math.radians(rotation[1])
+    rz = math.radians(rotation[2])
+    sinx, cosx = math.sin(rx), math.cos(rx)
+    siny, cosy = math.sin(ry), math.cos(ry)
+    sinz, cosz = math.sin(rz), math.cos(rz)
+
+    # Apply rotation around x-axis
+    y, z = y * cosx - z * sinx, y * sinx + z * cosx
+
+    # Apply rotation around y-axis
+    x, z = x * cosy + z * siny, x * -siny + z * cosy
+
+    # Apply rotation around z-axis
+    x, y = x * cosz - y * sinz, x * sinz + y * cosz
+
+    return (x, y, z)
