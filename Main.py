@@ -29,7 +29,7 @@ rayTracer.rtColor(1, 1, 1)
     Triangle(vertices=[(0, 1, -5), (-1, -1, -5), (1, -1, -5)], material=Material.saturn())
 ) """
 rayTracer.scene.append(
-    Pyramid(position=(0, -1.5, -7), width=2, height=2, depth=2, rotation=(0,45,0), material=Material.glass())
+    Pyramid(position=(0, -1.5, -7), width=2, height=2, depth=2, rotation=(0,45,0), material=Material.diamond())
 )
 rayTracer.scene.append(
     Plane(position=(0, -1.5, 0), normal=(0, 1, 0), material=Material.floor())
@@ -81,6 +81,6 @@ print("Done!")
 
 rect = pygame.Rect(0, 0, width, height)
 sub = screen.subsurface(rect)
-pygame.image.save(sub, "output2.png")
+pygame.image.save(sub, "output.png")
 
 pygame.quit()
