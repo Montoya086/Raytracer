@@ -17,7 +17,7 @@ screen = pygame.display.set_mode((width, height), pygame.DOUBLEBUF | pygame.HWAC
 screen.set_alpha(None)
 
 rayTracer = RayTracer(screen)
-#rayTracer.envMap = pygame.image.load("Textures/desert.bmp")
+rayTracer.envMap = pygame.image.load("Textures/desert.bmp")
 rayTracer.rtClearColor(0.5, 0.5, 0.5)
 rayTracer.rtColor(1, 1, 1)
 
@@ -26,15 +26,21 @@ rayTracer.rtColor(1, 1, 1)
     Sphere(position=(0, 0, -3), radius=1, material=Material.brick())
 ) """
 """ rayTracer.scene.append(
-    Triangle(vertices=[(0, 1, -5), (-1, -1, -5), (1, -1, -5)], material=Material.saturn())
+    Triangle(vertices=((-1, -1.5, -3), (1, -1.5, -3), (0, 0.5, -4)), material=Material.mirror())
 ) """
 rayTracer.scene.append(
-    Pyramid(position=(0, -1.5, -7), width=2, height=2, depth=2, rotation=(0,45,0), material=Material.diamond())
+    Pyramid(position=(0, -1.8, -7), width=1.7, height=1.7, depth=1.7, rotation=(0,45,0), material=Material.mirror())
+)
+rayTracer.scene.append(
+    Pyramid(position=(-1.5, -1.8, -5), width=1.7, height=1.7, depth=1.7, rotation=(0,45,0), material=Material.diamond())
+)
+rayTracer.scene.append(
+    Pyramid(position=(1.5, -1.8, -5), width=1.7, height=1.7, depth=1.7, rotation=(0,45,0), material=Material.earth())
 )
 rayTracer.scene.append(
     Plane(position=(0, -1.5, 0), normal=(0, 1, 0), material=Material.floor())
 )
-rayTracer.scene.append(
+""" rayTracer.scene.append(
     Plane(position=(0, 3, 0), normal=(0, -1, 0), material=Material.ceiling())
 )
 rayTracer.scene.append(
@@ -48,7 +54,7 @@ rayTracer.scene.append(
 )
 rayTracer.scene.append(
     Plane(position=(3, 0, 0), normal=(-1, 0, 0), material=Material.wall1())
-)
+) """
 
 
 

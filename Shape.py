@@ -279,22 +279,29 @@ class Pyramid(Shape):
         v3 = mm.addVec(v3, self.position)
         apex = mm.addVec(apex, self.position)
 
+        triangles = []
         # Define triangles for base
-        tri1 = Triangle((v0, v1, v2), self.material)
-        tri2 = Triangle((v0, v2, v3), self.material)
+        triangles.append(Triangle((v0, v1, v2), self.material))
+        triangles.append(Triangle((v0, v2, v3), self.material))
 
         # Define triangles for sides
-        tri3 = Triangle((v0, v1, apex), self.material)
-        tri4 = Triangle((v1, v2, apex), self.material)
-        tri5 = Triangle((v2, v3, apex), self.material)
-        tri6 = Triangle((v3, v0, apex), self.material)
+        triangles.append(Triangle((v0, v1, apex), self.material))
+        triangles.append(Triangle((v1, v2, apex), self.material))
+        triangles.append(Triangle((v2, v3, apex), self.material))
+        triangles.append(Triangle((v3, v0, apex), self.material))
 
         # Check for intersection with each triangle
-        closest_intercept = None
-        for tri in (tri1, tri2, tri3, tri4, tri5, tri6):
-            intercept = tri.intersect(origin, direction)
+        closestIntercept = None
+        for triangle in triangles:
+            intercept = triangle.intersect(origin, direction)
             if intercept is not None:
-                if closest_intercept is None or intercept.distance < closest_intercept.distance:
-                    closest_intercept = intercept
+                if closestIntercept is None or intercept.distance < closestIntercept.distance:
+                    closestIntercept = intercept
 
-        return closest_intercept
+        if closestIntercept:
+            return Intercept(distance=closestIntercept.distance,
+                            point=closestIntercept.point,
+                            normal=closestIntercept.normal,
+                            texcoords=closestIntercept.texcoords,
+                            obj=self)
+        return None
