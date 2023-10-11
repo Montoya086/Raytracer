@@ -35,7 +35,7 @@ rayTracer.scene.append(
     Pyramid(position=(-1.5, -1.8, -5), width=1.7, height=1.7, depth=1.7, rotation=(0,45,0), material=Material.diamond())
 )
 rayTracer.scene.append(
-    Pyramid(position=(1.5, -1.8, -5), width=1.7, height=1.7, depth=1.7, rotation=(0,45,0), material=Material.earth())
+    Pyramid(position=(1.5, -1.8, -5), width=1.7, height=1.7, depth=1.7, rotation=(0,45,0), material=Material.saturn())
 )
 rayTracer.scene.append(
     Plane(position=(0, -1.5, 0), normal=(0, 1, 0), material=Material.floor())
