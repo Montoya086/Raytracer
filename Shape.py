@@ -213,7 +213,6 @@ class Triangle(Shape):
         point = mm.addVec(origin, mm.escMultVector(t, direction))
 
         edge0 = mm.subVec(v0, v2)
-        edge1 = mm.subVec(v1, v0)
         edge2 = mm.subVec(v2, v1)
 
         if mm.dotProd(normal, mm.crossProd(edge0, mm.subVec(point, v2))) < 0:
@@ -225,11 +224,7 @@ class Triangle(Shape):
         if mm.dotProd(normal, mm.crossProd(edge2, mm.subVec(point, v1))) < 0:
             return None
 
-        v0, v1, v2 = self.vertices
 
-        edge0 = mm.subVec(v0, v2)
-        edge1 = mm.subVec(v1, v0)
-        edge2 = mm.subVec(v2, v1)
         c0 = mm.dotProd(edge0, mm.subVec(point, v2))
         c1 = mm.dotProd(edge1, mm.subVec(point, v0))
         c2 = mm.dotProd(edge2, mm.subVec(point, v1))
