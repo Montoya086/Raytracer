@@ -17,7 +17,15 @@ def glass():
 
 
 def diamond():
-    return Material(diffuse=(0.6, 0.6, 0.9), spec=128, ks=0.20, ior=2.417, matType=TRANSPARENT)
+    return Material(diffuse=(0.8, 0.8, 0.9), spec=128, ks=0.20, ior=2.417, matType=TRANSPARENT)
+
+
+def emerald():
+    return Material(diffuse=(0.07568, 0.61424, 0.07568), spec=128, ks=0.633, ior=2.417, matType=TRANSPARENT)
+
+
+def ruby():
+    return Material(diffuse=(0.61424, 0.04136, 0.04136), spec=128, ks=0.633, ior=2.417, matType=TRANSPARENT)
 
 
 def earth():
@@ -76,6 +84,10 @@ def opaqueCopper():
     return Material(diffuse=(0.9, 0.5, 0.3), spec=32, ks=0.5)
 
 
+def copper():
+    return Material(diffuse=(0.9, 0.5, 0.3), spec=32, ks=0.5, matType=REFLECTIVE)
+
+
 def ceiling():
     return Material(diffuse=(0.8, 0.8, 0.8), spec=32, ks=0.5)
 
@@ -90,6 +102,34 @@ def wall1():
 def wall2():
     return Material(diffuse=(0.6, 0.6, 0.6), spec=32, ks=0.5)
 
-def franz():
-    return Material(texture=pygame.image.load("Textures/franz.bmp"))
+def wood():
+    return Material(texture=pygame.image.load("Textures/wood.bmp"))
 
+
+def woodFloor():
+    return Material(texture=pygame.image.load("Textures/woodfloor.png"), spec=32, ks=0.5, matType=REFLECTIVE)
+
+def brickWall():
+    return Material(texture=pygame.image.load("Textures/brickwall.bmp"))
+
+def mosaicCeiling():
+    return Material(texture=pygame.image.load("Textures/mosaicCeiling.jpg"))
+
+def marmol():
+    return Material(texture=pygame.image.load("Textures/marmol.bmp"))
+
+
+def monalisa():
+    return Material(texture=pygame.image.load("Textures/monalisaFrame.png"))
+
+
+def scream():
+    return Material(texture=pygame.image.load("Textures/screamFrame.png"))
+
+
+def monet():
+    return Material(texture=pygame.image.load("Textures/monetFrame.png"))
+
+
+def vangoh():
+    return Material(texture=pygame.image.load("Textures/vangohFrame.png"))

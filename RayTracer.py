@@ -59,7 +59,7 @@ class RayTracer(object):
         self.screen.fill(self.clearColor)
 
     def rtPoint(self, x, y, color=None):
-        y = self.width - y
+        y = self.height - y-1
         if (0 <= x < self.width) and (0 <= y < self.height):
             if color is None:
                 color = self.currentColor
@@ -227,4 +227,4 @@ class RayTracer(object):
                         
 
                     self.rtPoint(x, y, rayColor)
-                    pygame.display.flip()
+                    #pygame.display.flip()

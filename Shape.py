@@ -67,13 +67,13 @@ class Plane(Shape):
         self.repeat_texture = repeat_texture
 
     def intersect(self, origin, direction):
-        denom = mm.dotProd(direction, self.normal)
+        denominator = mm.dotProd(direction, self.normal)
 
-        if abs(denom) <=0.0001:
+        if abs(denominator) <=0.0001:
             return None
 
         num = mm.dotProd(mm.subVec(self.position, origin), self.normal)
-        t= num / denom
+        t= num / denominator
 
         if t < 0 :
             return None
@@ -85,7 +85,7 @@ class Plane(Shape):
                          normal=self.normal,
                          texcoords=None,
                          obj=self)
-
+    
 
 class Disk(Plane):
     def __init__(self, position, normal, radius, material):
@@ -300,3 +300,96 @@ class Pyramid(Shape):
                             texcoords=closestIntercept.texcoords,
                             obj=self)
         return None
+    
+
+class Diamond(Shape):
+    def __init__(self, position, width, height, depth, rotation, material):
+        super().__init__(position=position, material=material)
+        self.width = width
+        self.height = height
+        self.depth = depth
+        self.rotation = rotation
+
+    def intersect(self, origin, direction):
+        # Define vertices of base
+        v0 = (0, 0, -self.depth / 2)
+        v1 = (-self.width / 2, 0, 0)
+        v2 = (0, 0, self.depth / 2)
+        v3 = (self.width / 2, 0, 0)
+
+        # Define vertices of apex
+        apex = (0, self.height, 0)
+
+        # Apply rotation transformation to vertices
+        v0 = mm.rotateVec(v0, self.rotation)
+        v1 = mm.rotateVec(v1, self.rotation)
+        v2 = mm.rotateVec(v2, self.rotation)
+        v3 = mm.rotateVec(v3, self.rotation)
+        apex = mm.rotateVec(apex, self.rotation)
+
+        # Translate vertices to position
+        v0 = mm.addVec(v0, self.position)
+        v1 = mm.addVec(v1, self.position)
+        v2 = mm.addVec(v2, self.position)
+        v3 = mm.addVec(v3, self.position)
+        apex = mm.addVec(apex, self.position)
+
+        triangles = []
+        # Define triangles for base
+        triangles.append(Triangle((v0, v1, apex), self.material))
+        triangles.append(Triangle((v1, v2, apex), self.material))
+        triangles.append(Triangle((v2, v3, apex), self.material))
+        triangles.append(Triangle((v3, v0, apex), self.material))
+
+        # Check for intersection with each triangle
+        closestIntercept = None
+        for triangle in triangles:
+            intercept = triangle.intersect(origin, direction)
+            if intercept is not None:
+                if closestIntercept is None or intercept.distance < closestIntercept.distance:
+                    closestIntercept = intercept
+
+        if closestIntercept:
+            return Intercept(distance=closestIntercept.distance,
+                            point=closestIntercept.point,
+                            normal=closestIntercept.normal,
+                            texcoords=closestIntercept.texcoords,
+                            obj=self)
+        return None
+
+
+class TextPlane(Shape):
+    def __init__(self, position, normal, material, repeat=0.5):
+        self.repeat = repeat
+        self.normal = normal
+        super().__init__(position, material)
+
+        if abs(self.normal[2]) < 0.999:
+            self.uV = mm.normVec(mm.crossProd(self.normal, (0,0,1)))
+        else:
+            self.uV = mm.normVec(mm.crossProd(self.normal, (0,1,0)))
+
+        self.vV = mm.normVec(mm.crossProd(self.normal, self.uV))
+        self.vV = mm.negativeTuple(self.vV)
+
+    def intersect(self, origin, direction):
+        denominator = mm.dotProd(direction, self.normal)
+        if abs(denominator) <= 0.0001:
+            return None
+        numer = mm.dotProd(mm.subVec(self.position, origin), self.normal)
+        t = numer / denominator
+        if t < 0:
+            return None
+        
+        D = mm.escMultVector(t, direction)
+        P = mm.addVec(origin, D)
+        repeat = self.repeat
+
+        u = mm.dotProd(mm.subVec(P, self.position), self.uV)*repeat % 1
+        v = mm.dotProd(mm.subVec(P, self.position),self.vV)* repeat %1
+
+        return Intercept(distance = t,
+            point=P,
+            normal=self.normal,
+            obj=self,
+            texcoords=(u,v))
